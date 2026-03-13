@@ -6,7 +6,7 @@
 
 | Dataset | Downloaded | Verified | Notes |
 |---------|------------|----------|-------|
-| Cholec80-CVS | ✅ (xlsx in project) | ✅ | 568 segments after filtering invalid |
+| Cholec80-CVS | Download from Figshare | ✅ | 568 segments after filtering invalid |
 | CholecSeg8k | ✅ (HuggingFace) | ✅ | 8,080 frames, 854×480 |
 | CholecTrack20 | ⚠️ Fixtures only | ✅ | Requires Synapse.org form for full data |
 | CholecT50 | ⚠️ Fixtures only | ✅ | Requires CAMMA form for full data |
@@ -14,7 +14,7 @@
 ## Download Instructions
 
 ### Cholec80-CVS
-- **Annotations:** `cholec80-CVS.xlsx` (in project) or from [Figshare](https://doi.org/10.6084/m9.figshare.c.5880458.v1)
+- **Annotations:** [Figshare](https://doi.org/10.6084/m9.figshare.c.5880458.v1) – save as `cholec80-CVS.xlsx` in project root
 - **Videos:** Request from [CAMMA](http://camma.u-strasbg.fr/datasets) (Cholec80)
 
 ### CholecSeg8k

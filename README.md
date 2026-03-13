@@ -23,7 +23,7 @@ Loads Strasberg's Critical View of Safety (CVS) annotations from the Cholec80-CV
 
 ### Option 1: Raw XLSX – Temporal segments (video clips)
 
-Use directly with `cholec80-CVS.xlsx` or `surgeons_annotations.xlsx`:
+Download annotations from [Figshare](https://doi.org/10.6084/m9.figshare.c.5880458.v1) or use `surgeons_annotations.xlsx`. Then:
 
 ```python
 from torch.utils.data import DataLoader
@@ -33,7 +33,7 @@ from dataloaders.cholec80_cvs import (
 )
 
 dataset = Cholec80CVSTemporalDataset(
-    annotations_path="cholec80-CVS.xlsx",  # or surgeons_annotations.xlsx
+    annotations_path="cholec80-CVS.xlsx",  # from Figshare
     video_root="./videos",  # Cholec80: video01.mp4, video02.mp4, ...
     num_frames=16,
     task="classification",
@@ -44,7 +44,7 @@ loader = DataLoader(dataset, batch_size=4, collate_fn=cholec80_cvs_temporal_coll
 
 ### Option 2: Processed frames (CHOLEC80-CVS-PUBLIC pipeline)
 
-After running the CHOLEC80-CVS-PUBLIC data preprocessing (`get_valid_frames.py`, `video_2_frames.py`, `annotation_2_labels.py`, `get_training_sets.py`):
+After running the [CHOLEC80-CVS-PUBLIC](https://github.com/ManuelRios18/CHOLEC80-CVS-PUBLIC) data preprocessing (`get_valid_frames.py`, `video_2_frames.py`, `annotations_2_labels.py`, `get_training_sets.py`):
 
 ```python
 from dataloaders.cholec80_cvs import (

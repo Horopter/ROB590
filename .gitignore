@@ -1,11 +1,22 @@
-# Downloaded datasets and large data files
+# Datasets and large data files
 data_downloads/
 data/
 datasets/
+*.zip
+*.tar.gz
+*.mp4
+*.avi
+*.mkv
+cholec80-CVS.xlsx
+surgeons_annotations.xlsx
+
+# External reference repos (use upstream directly)
+external/
 
 # Python
 __pycache__/
 .pytest_cache/
+.coverage
 *.py[cod]
 .venv/
 *.egg-info/
