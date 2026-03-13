@@ -1,0 +1,20 @@
+{
+  "video": 1,
+  "fps": 1,
+  "num_frames": 2,
+  "categories": {
+    "triplet": {"0": "grasper-grasp-gallbladder"},
+    "instrument": {"0": "grasper"},
+    "verb": {"0": "grasp"},
+    "target": {"0": "gallbladder"},
+    "phase": {"0": "preparation"}
+  },
+  "annotations": {
+    "0": [
+      {"ID": 1, "SC": 1.0, "BX": 0.1, "BY": 0.2, "BW": 0.1, "BH": 0.15, "phase": 0}
+    ],
+    "1": [
+      {"ID": 1, "SC": 1.0, "BX": 0.15, "BY": 0.25, "BW": 0.08, "BH": 0.12, "phase": 0}
+    ]
+  }
+}

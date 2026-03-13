@@ -1,0 +1,5 @@
+video_name,image,two_structures_score,cystic_plate_score,hc_triangle_score
+video01,100,1,0,0
+video01,101,1,0,0
+video02,50,0,1,0
+video02,51,2,2,1

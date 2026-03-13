@@ -1,0 +1,22 @@
+{
+  "annotations": {
+    "0": [
+      {
+        "tool_bbox": [120.0, 132.0, 23.0, 65.0],
+        "instrument": 0,
+        "operator": 0,
+        "intraoperative_track_id": 1,
+        "phase": 1
+      }
+    ],
+    "1": [
+      {
+        "tool_bbox": [100.0, 100.0, 30.0, 50.0],
+        "instrument": 1,
+        "operator": 1,
+        "intraoperative_track_id": 2,
+        "phase": 1
+      }
+    ]
+  }
+}

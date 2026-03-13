@@ -1,0 +1,15 @@
+# Downloaded datasets and large data files
+data_downloads/
+data/
+datasets/
+
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
