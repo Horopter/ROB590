@@ -102,7 +102,7 @@ Edit the **config block** at the top of `annotate_videos.py` for:
 
 - `INPUT_XLSX`, `OUTPUT_XLSX`, `SHEET_NAME`
 - `YOUTUBE_ID_COLUMN` / `YOUTUBE_LINK_COLUMN` (auto-detect if `None`)
-- `FRAME_INTERVAL_SEC`, `MAX_FRAMES_PER_VIDEO`
+- `FRAME_INTERVAL_SEC`, `FRAME_SAMPLE_RATE`, `MAX_FRAMES_PER_VIDEO`, `VISION_IMAGE_MAX_EDGE`
 - `OLLAMA_HOST`, `LOCAL_MODEL_NAME`, `FALLBACK_MODELS`
 - `DRY_RUN`, `DRY_RUN_ROWS`, `DEBUG_KEEP_VIDEOS`, `FORCE_REPROCESS`
 
@@ -127,3 +127,4 @@ If the primary model errors, the script retries with `FALLBACK_MODELS` in order.
 - **`yt-dlp` not found**: install and ensure it is on `PATH`.
 - **Ollama connection**: start Ollama; check `OLLAMA_HOST` (default `http://localhost:11434`).
 - **Vision model too slow**: reduce `MAX_FRAMES_PER_VIDEO` or increase `FRAME_INTERVAL_SEC`.
+- **`GGML_ASSERT(a->ne[2] * 4 == b->ne[0])` / HTTP 500 from Ollama vision**: frames are preprocessed before chat (default max edge 768px, pad to multiples of 28). Lower `VISION_IMAGE_MAX_EDGE` (e.g. `512`) or `FRAMES_PER_OLLAMA_BATCH=1`; upgrade Ollama and re-pull the model.

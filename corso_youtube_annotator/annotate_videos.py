@@ -70,6 +70,10 @@ MAX_FRAMES_PER_VIDEO = int(os.environ.get("MAX_FRAMES_PER_VIDEO", "0"))
 FRAME_SAMPLE_RATE = float(os.environ.get("FRAME_SAMPLE_RATE", "0.1"))
 FRAMES_PER_OLLAMA_BATCH = int(os.environ.get("FRAMES_PER_OLLAMA_BATCH", "4"))
 SCENE_CHANGE_EXTRA_SAMPLES = int(os.environ.get("SCENE_CHANGE_EXTRA_SAMPLES", "4"))
+# Shrink / pad frames before Ollama to avoid GGML shape crashes (Qwen2.5-VL likes multiples of 28).
+VISION_IMAGE_MAX_EDGE = int(os.environ.get("VISION_IMAGE_MAX_EDGE", "768"))
+VISION_IMAGE_ALIGN = int(os.environ.get("VISION_IMAGE_ALIGN", "28"))
+VISION_JPEG_QUALITY = int(os.environ.get("VISION_JPEG_QUALITY", "88"))
 
 OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 LOCAL_MODEL_NAME = os.environ.get("LOCAL_MODEL_NAME", "qwen2.5vl:7b")
@@ -580,8 +584,42 @@ def _extract_frames_opencv(
     return paths
 
 
-def _image_to_b64(path: Path) -> str:
-    return base64.b64encode(path.read_bytes()).decode("ascii")
+def _vision_jpeg_bytes(path: Path) -> bytes:
+    """
+    Decode frame JPEG, downscale if huge, pad so H/W are multiples of VISION_IMAGE_ALIGN,
+    re-encode. Raw supersized frames from ffmpeg often trigger llama.cpp GGML_ASSERT in vision.
+    """
+    import cv2
+
+    img = cv2.imread(str(path))
+    if img is None:
+        return path.read_bytes()
+    h, w = img.shape[:2]
+    if VISION_IMAGE_MAX_EDGE > 0:
+        m = max(h, w)
+        if m > VISION_IMAGE_MAX_EDGE:
+            scale = VISION_IMAGE_MAX_EDGE / m
+            wn = max(1, int(round(w * scale)))
+            hn = max(1, int(round(h * scale)))
+            img = cv2.resize(img, (wn, hn), interpolation=cv2.INTER_AREA)
+            h, w = img.shape[:2]
+    if VISION_IMAGE_ALIGN > 0:
+        al = VISION_IMAGE_ALIGN
+        nh = max(al, ((h + al - 1) // al) * al)
+        nw = max(al, ((w + al - 1) // al) * al)
+        if nh != h or nw != w:
+            img = cv2.copyMakeBorder(
+                img, 0, nh - h, 0, nw - w, cv2.BORDER_CONSTANT, value=(0, 0, 0)
+            )
+    q = max(1, min(100, VISION_JPEG_QUALITY))
+    ok, buf = cv2.imencode(".jpg", img, [int(cv2.IMWRITE_JPEG_QUALITY), q])
+    if not ok:
+        return path.read_bytes()
+    return buf.tobytes()
+
+
+def _vision_image_b64(path: Path) -> str:
+    return base64.b64encode(_vision_jpeg_bytes(path)).decode("ascii")
 
 
 def _chat_vision(
@@ -594,7 +632,7 @@ def _chat_vision(
     import ollama
 
     client = ollama.Client(host=OLLAMA_HOST)
-    images_b64 = [_image_to_b64(p) for p in image_paths]
+    images_b64 = [_vision_image_b64(p) for p in image_paths]
     sys_hint = ""
     if json_only:
         sys_hint = (
