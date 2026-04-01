@@ -1,0 +1,9 @@
+.venv/
+.env
+cookies.txt
+__pycache__/
+*.pyc
+.coverage
+*_annotated_draft.xlsx
+annotate_daemon.log
+annotate_daemon.pid
